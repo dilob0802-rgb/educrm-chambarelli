@@ -201,7 +201,7 @@ function renderFunil(container) {
 
 function renderProspects(container) {
     const html = `
-        <div class="schools-header">
+        <div class="schools-header" style="margin-bottom: 3rem;">
             <p class="text-muted">Gerencie todos os interessados em matrícula.</p>
             <button class="btn-primary" onclick="ui.openModal()">
                 <i class="fa-solid fa-plus"></i> Adicionar Interessado
@@ -225,7 +225,7 @@ function renderProspects(container) {
                 <div style="width:100%;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
                         <div class="school-name" style="font-size:1.5rem; display:flex; align-items:center; gap:0.75rem;">
-                            <i class="fa-solid fa-user-graduate" style="color:var(--primary);"></i> ${p.studentName} 
+                            <i class="fa-solid fa-user" style="color:var(--primary);"></i> ${p.parentName} 
                             <span style="font-size:0.9rem; background:var(--primary-light); color:var(--primary-dark); padding:4px 12px; border-radius:var(--radius-full); font-weight:600;">
                                 <i class="fa-solid fa-book-open" style="margin-right:4px;"></i> ${p.grade}
                             </span>
@@ -237,14 +237,14 @@ function renderProspects(container) {
 
                     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
                         
-                        <!-- Responsável -->
+                        <!-- Aluno -->
                         <div style="display:flex; align-items:center; gap:1rem;">
                             <div style="width:40px; height:40px; background:#f3f4f6; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user-graduate"></i>
                             </div>
                             <div>
-                                <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:2px;">Responsável</div>
-                                <div style="font-weight:600;">${p.parentName}</div>
+                                <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:2px;">Aluno(a)</div>
+                                <div style="font-weight:600;">${p.studentName}</div>
                             </div>
                         </div>
 
