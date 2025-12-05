@@ -26,6 +26,7 @@ function initDatabase() {
             phone TEXT NOT NULL,
             email TEXT NOT NULL,
             status TEXT DEFAULT 'Lead',
+            observation TEXT,
             date TEXT NOT NULL,
             lastContactDate INTEGER,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -35,6 +36,10 @@ function initDatabase() {
         if (err) {
             console.error('❌ Erro ao criar tabela prospects:', err.message);
         } else {
+            // Tenta adicionar a coluna 'observation' se ela não existir (para bancos legados)
+            db.run('ALTER TABLE prospects ADD COLUMN observation TEXT', (err) => {
+                // Ignora erro se a coluna já existir
+            });
             console.log('✅ Tabela prospects criada/verificada');
         }
     });
