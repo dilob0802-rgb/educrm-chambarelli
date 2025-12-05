@@ -207,7 +207,7 @@ function renderProspects(container) {
                 <i class="fa-solid fa-plus"></i> Adicionar Interessado
             </button>
         </div>
-        <div id="prospects-list"></div>
+        <div id="prospects-list" style="display:flex; flex-direction:column; gap:1.5rem;"></div>
     `;
     container.innerHTML = html;
 
@@ -217,16 +217,68 @@ function renderProspects(container) {
     sorted.forEach(p => {
         const card = document.createElement('div');
         card.className = 'school-card';
+        // Aumentando padding e espaçamento interno
+        card.style.padding = '2rem';
+
         card.innerHTML = `
-            <div class="school-info">
-                <div>
-                    <div class="school-name">${p.studentName} <span style="font-size:0.8rem; background:#e0e7ff; color:var(--primary); padding:2px 8px; border-radius:10px;">${p.grade}</span></div>
-                    <div class="school-meta" style="flex-direction:column; gap:0.25rem; align-items:flex-start;">
-                        <span><strong>Responsável:</strong> ${p.parentName}</span>
-                        <span><i class="fa-solid fa-phone"></i> ${p.phone}</span>
-                        <span><i class="fa-solid fa-envelope"></i> ${p.email}</span>
-                        <span style="margin-top:0.5rem;"><strong>Status:</strong> <span style="background:#e0e7ff; color:var(--primary); padding:2px 8px; border-radius:5px; font-size:0.85rem;">${p.status}</span></span>
+            <div class="school-info" style="align-items: flex-start;">
+                <div style="width:100%;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                        <div class="school-name" style="font-size:1.5rem; display:flex; align-items:center; gap:0.75rem;">
+                            <i class="fa-solid fa-user-graduate" style="color:var(--primary);"></i> ${p.studentName} 
+                            <span style="font-size:0.9rem; background:var(--primary-light); color:var(--primary-dark); padding:4px 12px; border-radius:var(--radius-full); font-weight:600;">
+                                <i class="fa-solid fa-book-open" style="margin-right:4px;"></i> ${p.grade}
+                            </span>
+                        </div>
+                        <span style="font-size:1rem; font-weight:600; padding:6px 16px; border-radius:var(--radius-md); background:${getStatusColorBg(p.status)}; color:${getStatusColorText(p.status)};">
+                            ${p.status}
+                        </span>
                     </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+                        
+                        <!-- Responsável -->
+                        <div style="display:flex; align-items:center; gap:1rem;">
+                            <div style="width:40px; height:40px; background:#f3f4f6; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:2px;">Responsável</div>
+                                <div style="font-weight:600;">${p.parentName}</div>
+                            </div>
+                        </div>
+
+                        <!-- Telefone -->
+                        <div style="display:flex; align-items:center; gap:1rem;">
+                            <div style="width:40px; height:40px; background:#f3f4f6; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:2px;">Telefone</div>
+                                <div style="font-weight:600;">${p.phone}</div>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div style="display:flex; align-items:center; gap:1rem;">
+                            <div style="width:40px; height:40px; background:#f3f4f6; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:2px;">E-mail</div>
+                                <div style="font-weight:600; word-break:break-all;">${p.email}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observação (se houver) -->
+                    ${p.observation ? `
+                    <div style="margin-top:1.5rem; padding:1rem; background:#fffbeb; border:1px solid #fcd34d; border-radius:var(--radius-md); display:flex; gap:0.75rem;">
+                        <i class="fa-solid fa-note-sticky" style="color:#d97706; margin-top:3px;"></i>
+                        <div style="color:#92400e; font-size:0.95rem;">${p.observation}</div>
+                    </div>
+                    ` : ''}
+
                 </div>
             </div>
         `;
@@ -234,71 +286,26 @@ function renderProspects(container) {
     });
 }
 
-function renderTurmas(container) {
-    const totalMatriculados = store.turmas.reduce((acc, t) => acc + t.matriculados, 0);
-    const totalVagas = store.turmas.reduce((acc, t) => acc + t.vagas, 0);
-    const vagasDisponiveis = totalVagas - totalMatriculados;
+function getStatusColorBg(status) {
+    const map = {
+        'Lead': '#e0e7ff',
+        '1º Contato': '#fef3c7',
+        'Respondeu': '#ede9fe',
+        'Visita Agendada': '#d1fae5',
+        'Em Negociação': '#fee2e2'
+    };
+    return map[status] || '#f3f4f6';
+}
 
-    const html = `
-        <div class="stats-grid" style="margin-bottom:2rem;">
-            <div class="stat-card">
-                <span class="stat-title">Total de Alunos</span>
-                <span class="stat-value">${totalMatriculados}</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-title">Vagas Totais</span>
-                <span class="stat-value">${totalVagas}</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-title">Vagas Disponíveis</span>
-                <span class="stat-value" style="color:${vagasDisponiveis > 50 ? 'var(--success)' : 'var(--danger)'}">${vagasDisponiveis}</span>
-            </div>
-        </div>
-
-        <div style="background:white; border-radius:var(--radius-lg); padding:1.5rem; box-shadow:var(--shadow-sm);">
-            <h3 style="margin-bottom:1rem;">Turmas do Chambarelli</h3>
-            <table style="width:100%; border-collapse:collapse;">
-                <thead>
-                    <tr style="border-bottom:2px solid var(--border); text-align:left;">
-                        <th style="padding:0.75rem;">Série</th>
-                        <th style="padding:0.75rem;">Turma</th>
-                        <th style="padding:0.75rem;">Período</th>
-                        <th style="padding:0.75rem; text-align:center;">Matriculados</th>
-                        <th style="padding:0.75rem; text-align:center;">Vagas</th>
-                        <th style="padding:0.75rem; text-align:center;">Disponíveis</th>
-                        <th style="padding:0.75rem; text-align:center;">Ocupação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${store.turmas.map(t => {
-        const disponiveis = t.vagas - t.matriculados;
-        const ocupacao = Math.round((t.matriculados / t.vagas) * 100);
-        const corOcupacao = ocupacao >= 90 ? '#ef4444' : ocupacao >= 70 ? '#f59e0b' : '#10b981';
-
-        return `
-                            <tr style="border-bottom:1px solid var(--border);">
-                                <td style="padding:0.75rem; font-weight:500;">${t.serie}</td>
-                                <td style="padding:0.75rem;">${t.turma}</td>
-                                <td style="padding:0.75rem;">${t.periodo || '-'}</td>
-                                <td style="padding:0.75rem; text-align:center;">${t.matriculados}</td>
-                                <td style="padding:0.75rem; text-align:center;">${t.vagas}</td>
-                                <td style="padding:0.75rem; text-align:center; font-weight:600; color:${disponiveis > 0 ? 'var(--success)' : 'var(--danger)'}">${disponiveis}</td>
-                                <td style="padding:0.75rem; text-align:center;">
-                                    <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem;">
-                                        <div style="width:60px; height:8px; background:#e5e7eb; border-radius:10px; overflow:hidden;">
-                                            <div style="width:${ocupacao}%; height:100%; background:${corOcupacao};"></div>
-                                        </div>
-                                        <span style="font-size:0.85rem; color:${corOcupacao}; font-weight:600;">${ocupacao}%</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
-    }).join('')}
-                </tbody>
-            </table>
-        </div>
-    `;
-    container.innerHTML = html;
+function getStatusColorText(status) {
+    const map = {
+        'Lead': '#4338ca',
+        '1º Contato': '#b45309',
+        'Respondeu': '#6d28d9',
+        'Visita Agendada': '#065f46',
+        'Em Negociação': '#991b1b'
+    };
+    return map[status] || '#374151';
 }
 
 // --- Initialization ---
@@ -315,7 +322,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             grade: formData.get('grade'),
             parentName: formData.get('parentName'),
             phone: formData.get('phone'),
-            email: formData.get('email')
+            email: formData.get('email'),
+            observation: formData.get('observation')
         });
         ui.closeModal();
     });
