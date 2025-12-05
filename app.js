@@ -316,8 +316,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Form Handler
     document.getElementById('form-add-prospect').addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn.innerText;
+        btn.innerText = 'Salvando...';
+        btn.disabled = true;
+
         const formData = new FormData(e.target);
-        await store.addProspect({
+        const result = await store.addProspect({
             studentName: formData.get('studentName'),
             grade: formData.get('grade'),
             parentName: formData.get('parentName'),
@@ -325,6 +331,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             email: formData.get('email'),
             observation: formData.get('observation')
         });
-        ui.closeModal();
+
+        if (result) {
+            ui.closeModal();
+        }
+
+        btn.innerText = originalText;
+        btn.disabled = false;
     });
 });
