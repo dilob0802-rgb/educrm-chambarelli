@@ -166,11 +166,11 @@ function renderFunil(container) {
     const colors = ['#06b6d4', '#f59e0b', '#8b5cf6', '#10b981', '#ef4444'];
 
     const html = `
-        <div style="display:flex; gap:1rem; overflow-x:auto; padding-bottom:1rem;">
+        <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:1rem; padding-bottom:1rem;">
             ${stages.map((stage, idx) => {
         const prospects = store.prospects.filter(p => p.status === stage);
         return `
-                    <div style="min-width:280px; background:white; border-radius:var(--radius-lg); padding:1rem; box-shadow:var(--shadow-sm);">
+                    <div style="background:white; border-radius:var(--radius-lg); padding:1rem; box-shadow:var(--shadow-sm);">
                         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; padding-bottom:0.75rem; border-bottom:3px solid ${colors[idx]};">
                             <h3 style="font-size:1rem; font-weight:600;">${stage}</h3>
                             <span style="background:${colors[idx]}; color:white; padding:0.25rem 0.5rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:600;">${prospects.length}</span>
