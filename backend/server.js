@@ -52,18 +52,18 @@ app.get('/api/prospects/:id', (req, res) => {
 
 // POST - Criar novo interessado
 app.post('/api/prospects', (req, res) => {
-    const { studentName, grade, parentName, phone, email } = req.body;
+    const { studentName, grade, parentName, phone, email, observation } = req.body;
 
     if (!studentName || !grade || !parentName || !phone || !email) {
         res.status(400).json({ error: 'Todos os campos são obrigatórios' });
         return;
     }
 
-    const sql = `INSERT INTO prospects (studentName, grade, parentName, phone, email, status, date) 
-                 VALUES (?, ?, ?, ?, ?, 'Lead', ?)`;
+    const sql = `INSERT INTO prospects (studentName, grade, parentName, phone, email, observation, status, date) 
+                 VALUES (?, ?, ?, ?, ?, ?, 'Lead', ?)`;
     const date = new Date().toISOString();
 
-    db.run(sql, [studentName, grade, parentName, phone, email, date], function (err) {
+    db.run(sql, [studentName, grade, parentName, phone, email, observation, date], function (err) {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -75,6 +75,7 @@ app.post('/api/prospects', (req, res) => {
             parentName,
             phone,
             email,
+            observation,
             status: 'Lead',
             date
         });
@@ -124,13 +125,13 @@ app.patch('/api/prospects/:id/status', (req, res) => {
 // PUT - Atualizar interessado completo
 app.put('/api/prospects/:id', (req, res) => {
     const { id } = req.params;
-    const { studentName, grade, parentName, phone, email, status } = req.body;
+    const { studentName, grade, parentName, phone, email, status, observation } = req.body;
 
     const sql = `UPDATE prospects 
-                 SET studentName = ?, grade = ?, parentName = ?, phone = ?, email = ?, status = ?, updated_at = CURRENT_TIMESTAMP 
+                 SET studentName = ?, grade = ?, parentName = ?, phone = ?, email = ?, status = ?, observation = ?, updated_at = CURRENT_TIMESTAMP 
                  WHERE id = ?`;
 
-    db.run(sql, [studentName, grade, parentName, phone, email, status, id], function (err) {
+    db.run(sql, [studentName, grade, parentName, phone, email, status, observation, id], function (err) {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
