@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 const db = require('./database');
 
 const app = express();
@@ -10,6 +11,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Servir arquivos estáticos da raiz do projeto
+app.use(express.static(path.join(__dirname, '..')));
 
 // Log de requisições
 app.use((req, res, next) => {
@@ -218,15 +222,7 @@ app.get('/api/historico/:prospect_id', (req, res) => {
 // ==================== ROTA RAIZ ====================
 
 app.get('/', (req, res) => {
-    res.json({
-        message: '🎓 EduCRM API - Chambarelli',
-        version: '1.0.0',
-        endpoints: {
-            prospects: '/api/prospects',
-            turmas: '/api/turmas',
-            historico: '/api/historico/:prospect_id'
-        }
-    });
+    res.sendFile(path.join(__dirname, '..', 'start.html'));
 });
 
 // ==================== INICIAR SERVIDOR ====================
