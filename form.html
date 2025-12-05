@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrículas Abertas - Centro Educacional Chambarelli</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #06b6d4;
+            --bg-body: #f3f4f6;
+            --text-main: #111827;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4F46E5 0%, #06b6d4 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: var(--text-main);
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.875rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #4338ca;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #059669;
+            background: #d1fae5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <div class="logo-area">
+            <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="header">
+            <h1>Garanta sua Vaga</h1>
+            <p>Preencha seus dados para o Centro Educacional Chambarelli entrar em contato.</p>
+        </div>
+
+        <form id="interest-form">
+            <div class="form-group">
+                <label>Nome do Aluno</label>
+                <input type="text" name="studentName" required placeholder="Nome completo do aluno">
+            </div>
+
+            <div class="form-group">
+                <label>Série Desejada</label>
+                <select name="grade" required>
+                    <option value="">Selecione a série...</option>
+                    <option value="Berçário">Berçário</option>
+                    <option value="MAT1">Maternal 1</option>
+                    <option value="MAT2">Maternal 2</option>
+                    <option value="PRE1">Pré 1</option>
+                    <option value="PRE2">Pré 2</option>
+                    <option value="1º Ano">1º Ano Fundamental</option>
+                    <option value="2º Ano">2º Ano Fundamental</option>
+                    <option value="3º Ano">3º Ano Fundamental</option>
+                    <option value="4º Ano">4º Ano Fundamental</option>
+                    <option value="5º Ano">5º Ano Fundamental</option>
+                    <option value="6º Ano">6º Ano Fundamental</option>
+                    <option value="7º Ano">7º Ano Fundamental</option>
+                    <option value="8º Ano">8º Ano Fundamental</option>
+                    <option value="9º Ano">9º Ano Fundamental</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Nome do Responsável</label>
+                <input type="text" name="parentName" required placeholder="Nome do pai/mãe/responsável">
+            </div>
+
+            <div class="form-group">
+                <label>Telefone / WhatsApp</label>
+                <input type="tel" name="phone" required placeholder="(DD) 99999-9999">
+            </div>
+
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" name="email" required placeholder="seu@email.com">
+            </div>
+
+            <button type="submit">Enviar Cadastro</button>
+        </form>
+
+        <div id="success-msg" class="success-message">
+            <i class="fa-solid fa-check-circle"></i>
+            <p style="font-weight:600; margin-top:0.5rem">Cadastro Recebido!</p>
+            <p style="font-size:0.9rem; color:#065f46">Nossa equipe entrará em contato em breve.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('interest-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const prospect = {
+                studentName: formData.get('studentName'),
+                grade: formData.get('grade'),
+                parentName: formData.get('parentName'),
+                phone: formData.get('phone'),
+                email: formData.get('email')
+            };
+
+            try {
+                // Salvar no banco de dados via API
+                const response = await fetch('http://localhost:3000/api/prospects', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(prospect)
+                });
+
+                if (response.ok) {
+                    // Show Success
+                    e.target.style.display = 'none';
+                    document.querySelector('.header').style.display = 'none';
+                    document.getElementById('success-msg').style.display = 'block';
+                } else {
+                    alert('Erro ao enviar cadastro. Tente novamente.');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar cadastro. Verifique se o servidor está rodando.');
+            }
+        });
+    </script>
+</body>
+
+</html>

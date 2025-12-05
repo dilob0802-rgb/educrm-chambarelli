@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduCRM - Chambarelli Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="button-premium.css">
+
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .server-status.online {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .server-status.offline {
+            background: #fee2e2;
+            color: #991b1b;
+            cursor: pointer;
+        }
+
+        .server-status.checking {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.online {
+            background: #10b981;
+        }
+
+        .status-dot.offline {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Chambarelli</span>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" onclick="router.navigate('dashboard')">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Visão Geral</span>
+                </button>
+                <button class="nav-item" onclick="router.navigate('funil')">
+                    <i class="fa-solid fa-filter"></i>
+                    <span>Funil de Vendas</span>
+                </button>
+                <button class="nav-item" onclick="router.navigate('prospects')">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Interessados</span>
+                </button>
+                <button class="nav-item" onclick="router.navigate('turmas')">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <span>Turmas</span>
+                </button>
+            </nav>
+
+            <div class="user-profile">
+                <div class="avatar">A</div>
+                <div class="info">
+                    <span class="name">Admin</span>
+                    <span class="role">Secretaria</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="actions">
+                    <div id="server-status" class="server-status checking">
+                        <div
+                            style="width:12px;height:12px;border:2px solid #f59e0b;border-top:2px solid transparent;border-radius:50%;animation:spin 1s linear infinite;">
+                        </div>
+                        Verificando...
+                    </div>
+                    <button class="icon-btn" onclick="showHelp()" title="Como iniciar o servidor">
+                        <i class="fa-solid fa-circle-question"></i>
+                    </button>
+                    <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+                    <button class="icon-btn"><i class="fa-solid fa-gear"></i></button>
+                </div>
+            </header>
+
+            <div id="content-area" class="content-area"></div>
+        </main>
+    </div>
+
+    <!-- Modal: Ajuda -->
+    <div id="modal-help" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-circle-question"></i> Como Iniciar o Servidor</h2>
+                <button class="close-btn" onclick="closeHelp()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="padding:1rem 0;">
+                <h3 style="color:#4F46E5; margin-bottom:1rem; font-size:1.1rem;">📋 Passo a Passo:</h3>
+
+                <div style="background:#f3f4f6; padding:1rem; border-radius:0.5rem; margin-bottom:1rem;">
+                    <div style="display:flex; align-items:start; gap:0.75rem; margin-bottom:1rem;">
+                        <div
+                            style="background:#4F46E5; color:white; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">
+                            1</div>
+                        <div>
+                            <strong style="color:#1f2937;">Localize o arquivo</strong>
+                            <p style="color:#6b7280; margin-top:0.25rem; font-size:0.9rem;">
+                                Vá até a pasta do CRM e encontre o arquivo:<br>
+                                <code
+                                    style="background:white; padding:0.25rem 0.5rem; border-radius:0.25rem; color:#4F46E5; font-family:monospace;">INICIAR-SERVIDOR.bat</code>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:start; gap:0.75rem; margin-bottom:1rem;">
+                        <div
+                            style="background:#4F46E5; color:white; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">
+                            2</div>
+                        <div>
+                            <strong style="color:#1f2937;">Dê duplo clique</strong>
+                            <p style="color:#6b7280; margin-top:0.25rem; font-size:0.9rem;">
+                                Clique duas vezes no arquivo <code
+                                    style="background:white; padding:0.25rem 0.5rem; border-radius:0.25rem; color:#4F46E5;">INICIAR-SERVIDOR.bat</code>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:start; gap:0.75rem; margin-bottom:1rem;">
+                        <div
+                            style="background:#4F46E5; color:white; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">
+                            3</div>
+                        <div>
+                            <strong style="color:#1f2937;">Aguarde iniciar</strong>
+                            <p style="color:#6b7280; margin-top:0.25rem; font-size:0.9rem;">
+                                Uma janela preta (PowerShell) vai abrir. Aguarde até aparecer:<br>
+                                <code
+                                    style="background:white; padding:0.25rem 0.5rem; border-radius:0.25rem; color:#10b981; font-family:monospace;">✅ Servidor rodando</code>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:start; gap:0.75rem;">
+                        <div
+                            style="background:#4F46E5; color:white; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">
+                            4</div>
+                        <div>
+                            <strong style="color:#1f2937;">Recarregue esta página</strong>
+                            <p style="color:#6b7280; margin-top:0.25rem; font-size:0.9rem;">
+                                Pressione <code
+                                    style="background:white; padding:0.25rem 0.5rem; border-radius:0.25rem; color:#4F46E5;">F5</code>
+                                ou clique em atualizar
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:#fef3c7; border-left:4px solid #f59e0b; padding:1rem; border-radius:0.5rem;">
+                    <strong style="color:#92400e;"><i class="fa-solid fa-lightbulb"></i> Dica:</strong>
+                    <p style="color:#78350f; margin-top:0.5rem; font-size:0.9rem;">
+                        Deixe a janela do PowerShell aberta enquanto usa o sistema. Para parar o servidor, pressione
+                        <code style="background:white; padding:0.25rem 0.5rem; border-radius:0.25rem;">Ctrl + C</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Adicionar Interessado -->
+    <div id="modal-add-prospect" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Adicionar Interessado</h2>
+                <button class="close-btn" onclick="ui.closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="form-add-prospect">
+                <div class="form-group">
+                    <label>Nome do Aluno</label>
+                    <input type="text" name="studentName" required>
+                </div>
+                <div class="form-group">
+                    <label>Série Desejada</label>
+                    <select name="grade" required>
+                        <option value="">Selecione...</option>
+                        <option value="Berçário">Berçário</option>
+                        <option value="MAT1">Maternal 1</option>
+                        <option value="MAT2">Maternal 2</option>
+                        <option value="PRE1">Pré 1</option>
+                        <option value="PRE2">Pré 2</option>
+                        <option value="1º Ano">1º Ano</option>
+                        <option value="2º Ano">2º Ano</option>
+                        <option value="3º Ano">3º Ano</option>
+                        <option value="4º Ano">4º Ano</option>
+                        <option value="5º Ano">5º Ano</option>
+                        <option value="6º Ano">6º Ano</option>
+                        <option value="7º Ano">7º Ano</option>
+                        <option value="8º Ano">8º Ano</option>
+                        <option value="9º Ano">9º Ano</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nome do Responsável</label>
+                    <input type="text" name="parentName" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefone</label>
+                    <input type="tel" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" name="email" required>
+                </div>
+                <button type="submit" class="btn-primary">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Funções de ajuda
+        function showHelp() {
+            document.getElementById('modal-help').classList.remove('hidden');
+        }
+
+        function closeHelp() {
+            document.getElementById('modal-help').classList.add('hidden');
+        }
+
+        // Verificar status do servidor
+        async function checkServerStatus() {
+            const statusEl = document.getElementById('server-status');
+
+            try {
+                const response = await fetch('http://localhost:3000/');
+                if (response.ok) {
+                    statusEl.className = 'server-status online';
+                    statusEl.innerHTML = '<div class="status-dot online"></div> Servidor Online';
+                    statusEl.onclick = null;
+                    statusEl.title = '';
+                } else {
+                    throw new Error('Offline');
+                }
+            } catch (error) {
+                statusEl.className = 'server-status offline';
+                statusEl.innerHTML = '<div class="status-dot offline"></div> Servidor Offline';
+                statusEl.title = 'Clique para ver instruções';
+                statusEl.onclick = showHelp;
+            }
+        }
+
+        // Verificar ao carregar e a cada 30 segundos
+        checkServerStatus();
+        setInterval(checkServerStatus, 30000);
+    </script>
+</body>
+
+</html>

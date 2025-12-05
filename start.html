@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduCRM - Iniciar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .status.checking {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.online {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status.offline {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .instructions {
+            background: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .instructions ol {
+            margin-left: 1.5rem;
+            color: #4b5563;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions code {
+            background: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <h1>EduCRM Chambarelli</h1>
+        <p>Sistema de Gestão de Interessados</p>
+
+        <div id="status" class="status checking">
+            <div class="spinner"></div>
+            Verificando servidor...
+        </div>
+
+        <div id="content"></div>
+    </div>
+
+    <script>
+        async function checkServer() {
+            try {
+                const response = await fetch('http://localhost:3000/');
+                if (response.ok) {
+                    // Servidor online!
+                    document.getElementById('status').className = 'status online';
+                    document.getElementById('status').innerHTML = '<i class="fa-solid fa-check-circle"></i> Servidor Online!';
+
+                    document.getElementById('content').innerHTML = `
+                        <a href="index.html" class="btn">
+                            <i class="fa-solid fa-arrow-right"></i> Abrir CRM
+                        </a>
+                    `;
+                } else {
+                    throw new Error('Servidor offline');
+                }
+            } catch (error) {
+                // Servidor offline
+                document.getElementById('status').className = 'status offline';
+                document.getElementById('status').innerHTML = '<i class="fa-solid fa-exclamation-triangle"></i> Servidor Offline';
+
+                document.getElementById('content').innerHTML = `
+                    <div class="instructions">
+                        <h3><i class="fa-solid fa-info-circle"></i> Como Iniciar o Servidor:</h3>
+                        <ol>
+                            <li>Dê <strong>duplo clique</strong> no arquivo:<br><code>INICIAR-SERVIDOR.bat</code></li>
+                            <li>Aguarde o servidor iniciar</li>
+                            <li>Recarregue esta página (F5)</li>
+                        </ol>
+                    </div>
+                    <button class="btn" onclick="location.reload()" style="margin-top: 1rem;">
+                        <i class="fa-solid fa-rotate"></i> Verificar Novamente
+                    </button>
+                `;
+            }
+        }
+
+        checkServer();
+    </script>
+</body>
+
+</html>
