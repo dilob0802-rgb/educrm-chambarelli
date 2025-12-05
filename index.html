@@ -287,7 +287,7 @@
             const statusEl = document.getElementById('server-status');
 
             try {
-                const response = await fetch('http://localhost:3000/');
+                const response = await fetch('/');
                 if (response.ok) {
                     statusEl.className = 'server-status online';
                     statusEl.innerHTML = '<div class="status-dot online"></div> Servidor Online';
